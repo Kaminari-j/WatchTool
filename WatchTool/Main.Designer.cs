@@ -34,16 +34,16 @@
 			this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
 			this.statusLabel_ServiceName = new System.Windows.Forms.ToolStripStatusLabel();
 			this.listBox_Download = new System.Windows.Forms.ListBox();
-			this.pbPictureSelected = new System.Windows.Forms.PictureBox();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.저장폴더설정DToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exitXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.btnSortList = new System.Windows.Forms.Button();
+			this.pbPictureSelected = new System.Windows.Forms.PictureBox();
 			this.statusStrip1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.pbPictureSelected)).BeginInit();
 			this.menuStrip1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pbPictureSelected)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tbUrl
@@ -99,19 +99,6 @@
 			this.listBox_Download.SelectedIndexChanged += new System.EventHandler(this.listBox_Download_SelectedIndexChanged);
 			this.listBox_Download.DoubleClick += new System.EventHandler(this.listBox_Download_DoubleClick);
 			// 
-			// pbPictureSelected
-			// 
-			this.pbPictureSelected.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.pbPictureSelected.BackgroundImage = global::WatchTool.Properties.Resources.background_img;
-			this.pbPictureSelected.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-			this.pbPictureSelected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pbPictureSelected.Location = new System.Drawing.Point(596, 60);
-			this.pbPictureSelected.Name = "pbPictureSelected";
-			this.pbPictureSelected.Size = new System.Drawing.Size(339, 339);
-			this.pbPictureSelected.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.pbPictureSelected.TabIndex = 4;
-			this.pbPictureSelected.TabStop = false;
-			// 
 			// menuStrip1
 			// 
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -162,6 +149,19 @@
 			this.btnSortList.UseVisualStyleBackColor = true;
 			this.btnSortList.Click += new System.EventHandler(this.btnSortList_Click);
 			// 
+			// pbPictureSelected
+			// 
+			this.pbPictureSelected.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.pbPictureSelected.BackgroundImage = global::WatchTool.Properties.Resources.background_img;
+			this.pbPictureSelected.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.pbPictureSelected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pbPictureSelected.Location = new System.Drawing.Point(596, 60);
+			this.pbPictureSelected.Name = "pbPictureSelected";
+			this.pbPictureSelected.Size = new System.Drawing.Size(339, 339);
+			this.pbPictureSelected.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+			this.pbPictureSelected.TabIndex = 4;
+			this.pbPictureSelected.TabStop = false;
+			// 
 			// Main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -178,13 +178,13 @@
 			this.MainMenuStrip = this.menuStrip1;
 			this.MaximizeBox = false;
 			this.Name = "Main";
-			this.Text = "sh_downloader";
+			this.Text = "Watch Tool";
 			this.Load += new System.EventHandler(this.Main_Load);
 			this.statusStrip1.ResumeLayout(false);
 			this.statusStrip1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.pbPictureSelected)).EndInit();
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pbPictureSelected)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
