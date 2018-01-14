@@ -87,5 +87,9 @@
   <ItemGroup>
     <None Include="Resources\background_img.jpg" />
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="FFMPEG\ffmpeg.exe" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

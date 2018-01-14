@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace WatchTool
 {
@@ -234,11 +235,49 @@ namespace WatchTool
 			}
 		}
 
-		public FileInfo MakeUniqueFileName(string path, string imgUrl)
+		protected void DownloadTwitterVideo()
+		{
+			foreach (string imgUrl in this._DownloadList)
+			{
+				// ex) "https://video.twimg.com/ext_tw_video/951480266375098369/pr/pl/316x180/_tsyxIfYoocMkpYD.m3u8"
+				string targetUrl = this.GetOriginalImageName(imgUrl);
+				string fullName = MakeUniqueFileName(this._DownloadDIR
+																+ @"\" + DateTime.Now.ToString("yyyyMMdd")
+																+ "_" + this.SERVICE_NAME
+																+ "_",
+											  imgUrl,
+											  MEDIATYPE.video
+											 ).FullName;
+
+				Process ffmpeg = new Process
+				{
+					StartInfo =
+				{
+					FileName = @".\..\..\FFMPEG\ffmpeg.exe",
+					Arguments = String.Format(@"-i ""{0}"" -bsf:a aac_adtstoasc -vcodec copy -c copy -crf 50 {1}",
+												targetUrl,
+												fullName),
+					UseShellExecute = false,
+					RedirectStandardOutput = true,
+					CreateNoWindow = true,
+					WorkingDirectory = this._DownloadDIR
+				}
+				};
+
+				ffmpeg.EnableRaisingEvents = true;
+				ffmpeg.OutputDataReceived += (s, e) => Debug.WriteLine(e.Data);
+				ffmpeg.ErrorDataReceived += (s, e) => Debug.WriteLine($@"Error: {e.Data}");
+				ffmpeg.Start();
+				ffmpeg.BeginOutputReadLine();
+				ffmpeg.WaitForExit();
+			}
+		}
+
+		public FileInfo MakeUniqueFileName(string path, string imgUrl, MEDIATYPE _MediaType)
 		{
 			string dir = Path.GetDirectoryName(path);
 			string fileName = Path.GetFileNameWithoutExtension(path);
-			string fileExt = Path.GetExtension(imgUrl);
+			string fileExt = _MediaType == MEDIATYPE.image ? Path.GetExtension(imgUrl) : "mp4";
 
 			for (int i = 1; ; ++i)
 			{
