@@ -48,7 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DownloadFile.cs" />
+    <Compile Include="Common\Common.cs" />
+    <Compile Include="Downloader.cs" />
+    <Compile Include="Common\FileData.cs" />
+    <Compile Include="ServiceDownload.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>

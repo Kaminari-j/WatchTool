@@ -74,12 +74,12 @@ namespace WatchTool
 			switch (svc)
 			{
 				case SERVICE.twitter:
-					DownloadTwitter dt = new DownloadTwitter(url, this as IControlInterface);
-					dt.StartDownload();
+					DownloadTwitter dt = new DownloadTwitter(this as IControlInterface);
+					dt.StartDownload(url);
 					break;
 				case SERVICE.instagram:
-					DownloadInstagram di = new DownloadInstagram(url, this as IControlInterface);
-					di.StartDownload();
+					DownloadInstagram di = new DownloadInstagram(this as IControlInterface);
+					di.StartDownload(url);
 					break;
 				case SERVICE.NONE:
 				default:
