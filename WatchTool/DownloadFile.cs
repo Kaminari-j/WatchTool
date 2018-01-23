@@ -130,7 +130,7 @@ namespace WatchTool
 
 				foreach (string imgUrl in lstFiles)
 				{
-					string targetUrl = this.GetOriginalImageName(imgUrl);
+					string targetUrl = this.GetOriginalImageUrl(imgUrl);
 
 					string fullName = "";
 					fullName = MakeUniqueFileName(System.Environment.CurrentDirectory
@@ -202,7 +202,7 @@ namespace WatchTool
 			{
 				foreach (string imgUrl in this._DownloadList)
 				{
-					string targetUrl = this.GetOriginalImageName(imgUrl);
+					string targetUrl = this.GetOriginalImageUrl(imgUrl);
 
 					string fullName = "";
 					fullName = MakeUniqueFileName(this._DownloadDIR
@@ -242,7 +242,7 @@ namespace WatchTool
 			foreach (string imgUrl in this._DownloadList)
 			{
 				// ex) "https://video.twimg.com/ext_tw_video/951480266375098369/pr/pl/316x180/_tsyxIfYoocMkpYD.m3u8"
-				string targetUrl = this.GetOriginalImageName(imgUrl);
+				string targetUrl = this.GetOriginalImageUrl(imgUrl);
 				string fullName = MakeUniqueFileName(this._DownloadDIR
 																+ @"\" + DateTime.Now.ToString("yyyyMMdd")
 																+ "_" + this.SERVICE_NAME
@@ -290,14 +290,14 @@ namespace WatchTool
 			}
 		}
 
-		protected virtual string GetOriginalImageName(string imgUrl)
+		protected virtual string GetOriginalImageUrl(string imgUrl)
 		{
 			// orig をつけるかほかの方法
 
 			return imgUrl;
 		}
 
-		protected virtual string GetOriginalMovieName(string imgUrl)
+		protected virtual string GetOriginalMovieUrl(string imgUrl)
 		{
 			// orig をつけるかほかの方法
 
@@ -391,7 +391,7 @@ namespace WatchTool
 			return tmpFileList;
 		}
 
-		protected override string GetOriginalImageName(string imgUrl)
+		protected override string GetOriginalImageUrl(string imgUrl)
 		{
 			// 末尾に :orig をつける
 			// 引数 imgUrl の文字列の例 "data-image-url="https://pbs.twimg.com/media/DDp82xwUMAEDOpz.jpg""
@@ -411,7 +411,7 @@ namespace WatchTool
 			return string.Empty;
 		}
 
-		protected override string GetOriginalMovieName(string imgUrl)
+		protected override string GetOriginalMovieUrl(string imgUrl)
 		{
 			// orig をつけるかほかの方法
 
