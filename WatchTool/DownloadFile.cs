@@ -117,7 +117,7 @@ namespace WatchTool
 
 		protected virtual List<string> GetFileListFromContent(string content)
 		{
-			return null;
+			throw new NotImplementedException();
 		}
 
 		protected bool DoDownloadFile(List<string> lstFiles)
@@ -138,7 +138,8 @@ namespace WatchTool
 													+ "_" + this.SERVICE_NAME
 													+ "_"
 													, imgUrl
-															).FullName;
+													, MEDIATYPE.image
+												).FullName;
 
 					// Set File Names to listbox
 					this.frm.DoAddListBoxValue(fullName);
@@ -209,7 +210,8 @@ namespace WatchTool
 													+ "_" + this.SERVICE_NAME
 													+ "_"
 													, imgUrl
-															).FullName;
+													, MEDIATYPE.image
+												).FullName;
 
 					using (WebClient webClient = new WebClient())
 					{
@@ -391,19 +393,13 @@ namespace WatchTool
 
 		protected override string GetOriginalImageName(string imgUrl)
 		{
-			// 後ろに :orig をつける
+			// 末尾に :orig をつける
 			// 引数 imgUrl の文字列の例 "data-image-url="https://pbs.twimg.com/media/DDp82xwUMAEDOpz.jpg""
-
 			try
 			{
 				string[] spltRst = imgUrl.Split('\"');
 				if (spltRst.Length == 3)
-				{
-					string url = spltRst[1];
-					url = url + ":orig";
-
-					return url;
-				}
+					return spltRst[1] + ":orig";
 			}
 			catch (Exception ex)
 			{

@@ -51,26 +51,6 @@ namespace WatchTool
 				di.Create();
 			}
 
-			Process ffmpeg = new Process
-			{
-				StartInfo =
-				{
-					FileName = @".\..\..\FFMPEG\ffmpeg.exe",
-					Arguments = String.Format(@"-i ""{0}"" -bsf:a aac_adtstoasc -vcodec copy -c copy -crf 50 test.mp4",
-													   "https://video.twimg.com/ext_tw_video/951480266375098369/pr/pl/316x180/_tsyxIfYoocMkpYD.m3u8"),
-					UseShellExecute = false,
-					RedirectStandardOutput = true,
-					CreateNoWindow = true,
-					WorkingDirectory = @"C:\Users\rodney\Documents\Do"
-				}
-			};
-
-			ffmpeg.EnableRaisingEvents = true;
-			ffmpeg.OutputDataReceived += (s, e) => Debug.WriteLine(e.Data);
-			ffmpeg.ErrorDataReceived += (s, e) => Debug.WriteLine($@"Error: {e.Data}");
-			ffmpeg.Start();
-			ffmpeg.BeginOutputReadLine();
-			ffmpeg.WaitForExit();
 		}
 
 		#region -- Methods --
