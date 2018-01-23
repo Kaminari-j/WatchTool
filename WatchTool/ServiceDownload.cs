@@ -20,7 +20,6 @@ namespace WatchTool
 		protected WatchTool.MEDIATYPE MEDIA_TYPE = MEDIATYPE.NONE;
 
 		private string _DownloadDIR { get; set; }
-		//protected string _URL { get; set; }
 
 		public ServiceDownload(SERVICE serviceName, IControlInterface controlerForm)
 		{
