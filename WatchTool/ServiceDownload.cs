@@ -25,44 +25,14 @@ namespace WatchTool
 		{
 			this.SERVICE_NAME = serviceName;
 			this._ControlerForm = controlerForm;
+
+			DoInitialize();
 		}
 
-		public bool StartDownload(string url)
+		public void DoInitialize()
 		{
 			try
 			{
-				bool dl_result = false;
-
-				if (string.IsNullOrEmpty(url))
-					return false;
-				else
-					url = SetTargetUrl(url);
-
-				string content = Downloader.GetContentsFromSrc(url);
-
-				List<string> fileList = MakeFileList(content);
-
-				if (fileList.Count >= 1)
-				{
-					dl_result = PrefareDownload(fileList);
-				}
-
-				return dl_result;
-			}
-			catch (Exception ex)
-			{
-				Common.ShowExceptionMsgBox(ex);
-				return false;
-			}
-		}
-
-		protected bool PrefareDownload(List<string> urlList)
-		{
-			// Download from web
-			try
-			{
-				_ControlerForm.DoSetProgressBarMaxValue(urlList.Count); // SetProgressbarMax
-
 				// Directory Initialize
 				this._DownloadDIR = (string.IsNullOrEmpty(Properties.Settings.Default.DownloadDir)) ? Application.StartupPath + @"\Download" : Properties.Settings.Default.DownloadDir;
 				DirectoryInfo di = new DirectoryInfo(_DownloadDIR);
@@ -70,38 +40,74 @@ namespace WatchTool
 				{
 					di.Create();
 				}
-
-				List<FileData> files = new List<FileData>();
-				string targetUrl = "";
-				string fullName = "";
-				foreach (string url in urlList)
-				{
-					targetUrl = this.GetOriginalImageUrl(url);
-					fullName = MakeUniqueFileName(this._DownloadDIR
-													+ @"\" + DateTime.Now.ToString("yyyyMMdd")
-													+ "_" + this.SERVICE_NAME
-													+ "_"
-													, targetUrl
-													, MEDIATYPE.image
-													, files.Count
-												).FullName;
-
-					files.Add(new FileData(targetUrl, fullName));
-				}
-
-				Thread th = new Thread(() => Downloader.DownloadThread(files, this._ControlerForm));
-				th.Start();
-
-				return true;
 			}
 			catch (Exception ex)
 			{
 				Common.ShowExceptionMsgBox(ex);
-				return false;
 			}
 		}
 
-		protected List<string> MakeFileList(string WebContent)
+		private List<FileData> PrefareDownload(string url)
+		{
+			if (string.IsNullOrEmpty(url))
+				throw new ArgumentNullException();
+
+			try
+			{
+				url = SetTargetUrl(url);
+				string content = Downloader.GetContentsFromSrc(url);
+
+				List<string> targetList = MakeUrlListFromContent(content);
+
+				List<FileData> files = new List<FileData>();
+				string mediaURL = null;
+				string uploadDate = null;
+				string fileName = null;
+
+				foreach (string target in targetList)
+				{
+					mediaURL = this.GetOriginalImageUrl(target);
+					uploadDate = this.GetUploadDateTime(content);
+					fileName = MakeUniqueFileName(this._DownloadDIR
+													+ @"\" + uploadDate
+													+ "_" + this.SERVICE_NAME + "_"
+													, target
+													, target.Contains("mp4") ? MEDIATYPE.video : MEDIATYPE.image
+													, files.Count
+												).FullName;
+
+					files.Add(new FileData(mediaURL, fileName, uploadDate));
+				}
+
+				return files;
+			}
+			catch (Exception ex)
+			{
+				Common.ShowExceptionMsgBox(ex);
+				return null;
+			}
+		}
+
+		public void StartDownload(string url)
+		{
+			try
+			{
+				List<FileData> files = PrefareDownload(url);
+
+				// SetProgressbarMax
+				_ControlerForm.SetProgressBarMaxValue(files.Count);
+
+				// Start thread
+				new Thread(() => Downloader.DownloadThread(files, this._ControlerForm)).Start();
+
+			}
+			catch (Exception ex)
+			{
+				Common.ShowExceptionMsgBox(ex);
+			}
+		}
+
+		protected List<string> MakeUrlListFromContent(string WebContent)
 		{
 			try
 			{
@@ -126,7 +132,7 @@ namespace WatchTool
 		{
 			string dir = Path.GetDirectoryName(path);
 			string fileName = Path.GetFileNameWithoutExtension(path);
-			string fileExt = _MediaType == MEDIATYPE.image ? Path.GetExtension(url) : "mp4";
+			string fileExt = _MediaType == MEDIATYPE.image ? ".jpg" : ".mp4";
 
 			int existCount;
 			for (existCount = 1; ; existCount++)
@@ -163,6 +169,11 @@ namespace WatchTool
 		{
 			throw new NotImplementedException();
 		}
+
+		protected virtual string GetUploadDateTime(string content)
+		{
+			return DateTime.Now.ToString("yyyyMMdd");
+		}
 	}
 
 	public class DownloadTwitter : ServiceDownload
@@ -174,7 +185,7 @@ namespace WatchTool
 		protected override List<string> GetUrlListFromContent(string content)
 		{
 			this.MEDIA_TYPE = MEDIATYPE.image; // Twitterの動画ダウンロードは今後追加するため
-			MatchCollection tmp = System.Text.RegularExpressions.Regex.Matches(content, this._grepKeyword);
+			MatchCollection tmp = Regex.Matches(content, this._grepKeyword);
 			List<string> tmpFileList = new List<string>();
 			foreach (Match file in tmp)
 			{
@@ -203,6 +214,15 @@ namespace WatchTool
 			}
 
 			return string.Empty;
+		}
+
+		protected override string GetUploadDateTime(string content)
+		{
+			string date_time_ms = Regex.Matches(content, @"data-time-ms=""[0-9]+""")[0].ToString();
+			string value_of_date_time_ms = Regex.Matches(date_time_ms, @"[0-9]+")[0].ToString();
+			long unixms = Convert.ToInt64(value_of_date_time_ms.ToString());
+			DateTime uploadDT = Common.GetDateTimeFromUnixTime(unixms);
+			return uploadDT.ToString("yyyyMMdd");
 		}
 	}
 
@@ -251,13 +271,23 @@ namespace WatchTool
 		{
 			try
 			{
-				return System.Text.RegularExpressions.Regex.Matches(url, @"https\:\/\/www\.instagram\.com\/p\/[0-9a-zA-Z\-]+/?")[0].ToString() + "?__a=1";
+				return Regex.Matches(url, @"https\:\/\/www\.instagram\.com\/p\/[0-9a-zA-Z\-]+/?")[0].ToString() + "?__a=1";
 			}
 			catch (Exception)
 			{
 				Common.ShowErrorMsgBox(url + "\r\n이 주소는 아직(?)지원하지 않습니다!");
 				return null;
 			}
+		}
+
+		protected override string GetUploadDateTime(string content)
+		{
+			List<string> tmpFileList = new List<string>();
+			JObject jobj = JObject.Parse(content);
+			string value_of_date_time_sec = jobj["graphql"]["shortcode_media"]["taken_at_timestamp"].ToString();
+			int unixsec = Convert.ToInt32(value_of_date_time_sec.ToString()); // int32
+			DateTime uploadDT = Common.GetDateTimeFromUnixTime(unixsec);
+			return uploadDT.ToString("yyyyMMdd");
 		}
 	}
 }

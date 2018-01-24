@@ -21,5 +21,17 @@ namespace WatchTool
 		{
 			MessageBox.Show(msg, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
 		}
+
+		public static DateTime GetDateTimeFromUnixTime(long unixTimeMilliSec)
+		{
+			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+			return epoch.AddMilliseconds(unixTimeMilliSec);
+		}
+
+		public static DateTime GetDateTimeFromUnixTime(int unixTimeSec)
+		{
+			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+			return epoch.AddSeconds(unixTimeSec);
+		}
 	}
 }

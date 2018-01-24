@@ -11,11 +11,17 @@ namespace WatchTool
 	{
 		public string URL { get; set; }
 		public string FileName { get; set; }
+		public string UploadDate { get; set; }
 
 		public FileData(string URL, string FileName)
 		{
 			this.URL = URL;
 			this.FileName = FileName;
+		}
+
+		public FileData(string URL, string FileName, string UploadDate) : this(URL, FileName)
+		{
+			this.UploadDate = UploadDate;
 		}
 	}
 

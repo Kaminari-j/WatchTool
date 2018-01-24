@@ -24,9 +24,9 @@ namespace WatchTool
 	public interface IControlInterface
 	{
 		#region -- ProgressBar
-		void DoSetProgressBarMaxValue(int MaxValue);
+		void SetProgressBarMaxValue(int MaxValue);
 		void DoPerformProgressBarStep();
-		void DoResetProgressBar();
+		void ResetProgressBar();
 		#endregion
 
 		#region -- ListBox
@@ -120,7 +120,7 @@ namespace WatchTool
 			}
 		}
 
-		public void DoSetProgressBarMaxValue(int MaxValue)
+		public void SetProgressBarMaxValue(int MaxValue)
 		{
 			this.toolStripProgressBar1.Maximum = MaxValue;
 			this.toolStripProgressBar1.Step = 1;
@@ -151,11 +151,11 @@ namespace WatchTool
 			}
 		}
 
-		public void DoResetProgressBar()
+		public void ResetProgressBar()
 		{
 			if (this.statusStrip1.InvokeRequired)
 			{
-				DoResetProgressBarCallback d = new DoResetProgressBarCallback(DoResetProgressBar);
+				DoResetProgressBarCallback d = new DoResetProgressBarCallback(ResetProgressBar);
 				this.Invoke(d, new object[] { });
 			}
 			else

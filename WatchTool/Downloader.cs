@@ -69,7 +69,7 @@ namespace WatchTool
 				}
 
 				// Reset Progress Bar
-				controlerForm.DoResetProgressBar();
+				controlerForm.ResetProgressBar();
 			}
 			catch (Exception ex)
 			{
