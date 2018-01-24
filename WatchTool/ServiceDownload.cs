@@ -178,18 +178,18 @@ namespace WatchTool
 
 	public class DownloadTwitter : ServiceDownload
 	{
-		string _grepKeyword = @"data-image-url=.*";
-
 		public DownloadTwitter(IControlInterface MainFrm) : base(SERVICE.twitter, MainFrm) { }
 
 		protected override List<string> GetUrlListFromContent(string content)
 		{
+			string _grepKeyword = @"og:image"" content="".*""\>";
+
 			this.MEDIA_TYPE = MEDIATYPE.image; // Twitterの動画ダウンロードは今後追加するため
-			MatchCollection tmp = Regex.Matches(content, this._grepKeyword);
+			MatchCollection tmp = Regex.Matches(content, _grepKeyword);
 			List<string> tmpFileList = new List<string>();
 			foreach (Match file in tmp)
 			{
-				tmpFileList.Add(file.ToString());
+				tmpFileList.Add(Regex.Match(file.ToString(), @"https.*\.jpg").ToString());
 			}
 
 			return tmpFileList;
@@ -197,14 +197,9 @@ namespace WatchTool
 
 		protected override string GetOriginalImageUrl(string imgUrl)
 		{
-			// 末尾に :orig をつける
-			// 引数 imgUrl の文字列の例 "data-image-url="https://pbs.twimg.com/media/DDp82xwUMAEDOpz.jpg""
-			// やり方変えたい。。。
 			try
 			{
-				string[] spltRst = imgUrl.Split('\"');
-				if (spltRst.Length == 3)
-					return spltRst[1] + ":orig";
+				return imgUrl + ":orig";
 			}
 			catch (Exception ex)
 			{
@@ -212,14 +207,12 @@ namespace WatchTool
 
 				return string.Empty;
 			}
-
-			return string.Empty;
 		}
 
 		protected override string GetUploadDateTime(string content)
 		{
-			string date_time_ms = Regex.Matches(content, @"data-time-ms=""[0-9]+""")[0].ToString();
-			string value_of_date_time_ms = Regex.Matches(date_time_ms, @"[0-9]+")[0].ToString();
+			string date_time_ms = Regex.Match(content, @"data-time-ms=""[0-9]+""").ToString();
+			string value_of_date_time_ms = Regex.Match(date_time_ms, @"[0-9]+").ToString();
 			long unixms = Convert.ToInt64(value_of_date_time_ms.ToString());
 			DateTime uploadDT = Common.GetDateTimeFromUnixTime(unixms);
 			return uploadDT.ToString("yyyyMMdd");
@@ -271,7 +264,7 @@ namespace WatchTool
 		{
 			try
 			{
-				return Regex.Matches(url, @"https\:\/\/www\.instagram\.com\/p\/[0-9a-zA-Z\-]+/?")[0].ToString() + "?__a=1";
+				return Regex.Match(url, @"https\:\/\/www\.instagram\.com\/p\/[0-9a-zA-Z\-]+/?").ToString() + "?__a=1";
 			}
 			catch (Exception)
 			{
