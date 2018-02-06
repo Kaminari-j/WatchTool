@@ -11,29 +11,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WatchToolLib;
 
 namespace WatchTool
 {
-	public enum SERVICE { NONE, twitter, instagram };
-	public enum MEDIATYPE { NONE, image, video };
-
 	delegate void DoAddListBoxValueCallback(string TextValue);
 	delegate void DoPerformProgressBarStepCallback();
 	delegate void DoResetProgressBarCallback();
 
-	public interface IControlInterface
-	{
-		#region -- ProgressBar
-		void SetProgressBarMaxValue(int MaxValue);
-		void DoPerformProgressBarStep();
-		void ResetProgressBar();
-		#endregion
-
-		#region -- ListBox
-		void DoSetListBoxData(string[] Data);
-		void DoAddListBoxValue(string TextValue);
-		#endregion
-	}
 
 	public partial class Main : Form, IControlInterface
 	{
@@ -55,14 +40,14 @@ namespace WatchTool
 
 		#region -- Methods --
 
-		private WatchTool.SERVICE GetServiceName(string url)
+		private WatchToolLib.SERVICE GetServiceName(string url)
 		{
 			if (url.Contains("twitter.com"))
-				return WatchTool.SERVICE.twitter;
+				return WatchToolLib.SERVICE.twitter;
 			if (url.Contains("instagram.com"))
-				return WatchTool.SERVICE.instagram;
+				return WatchToolLib.SERVICE.instagram;
 			else
-				return WatchTool.SERVICE.NONE;
+				return WatchToolLib.SERVICE.NONE;
 		}
 
 		private void onButtonclick()
@@ -74,11 +59,11 @@ namespace WatchTool
 			switch (svc)
 			{
 				case SERVICE.twitter:
-					DownloadTwitter dt = new DownloadTwitter(this as IControlInterface);
+					DownloadTwitter dt = new DownloadTwitter(this as IControlInterface, Properties.Settings.Default.DownloadDir);
 					dt.StartDownload(url);
 					break;
 				case SERVICE.instagram:
-					DownloadInstagram di = new DownloadInstagram(this as IControlInterface);
+					DownloadInstagram di = new DownloadInstagram(this as IControlInterface, Properties.Settings.Default.DownloadDir);
 					di.StartDownload(url);
 					break;
 				case SERVICE.NONE:
