@@ -24,13 +24,13 @@ namespace WatchTool
 
 		public static DateTime GetDateTimeFromUnixTime(long unixTimeMilliSec)
 		{
-			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Local).AddHours(9);
 			return epoch.AddMilliseconds(unixTimeMilliSec);
 		}
 
 		public static DateTime GetDateTimeFromUnixTime(int unixTimeSec)
 		{
-			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+			var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Local).AddHours(9);
 			return epoch.AddSeconds(unixTimeSec);
 		}
 	}

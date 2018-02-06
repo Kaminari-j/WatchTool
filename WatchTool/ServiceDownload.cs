@@ -17,7 +17,6 @@ namespace WatchTool
 		protected IControlInterface _ControlerForm;
 
 		protected WatchTool.SERVICE SERVICE_NAME = SERVICE.NONE;
-		protected WatchTool.MEDIATYPE MEDIA_TYPE = MEDIATYPE.NONE;
 
 		private string _DownloadDIR { get; set; }
 
@@ -55,7 +54,10 @@ namespace WatchTool
 			try
 			{
 				url = SetTargetUrl(url);
+
 				string content = Downloader.GetContentsFromSrc(url);
+				if (content == null)
+					return null;
 
 				List<string> targetList = MakeUrlListFromContent(content);
 
@@ -93,6 +95,9 @@ namespace WatchTool
 			try
 			{
 				List<FileData> files = PrefareDownload(url);
+
+				if (files == null)
+					return;
 
 				// SetProgressbarMax
 				_ControlerForm.SetProgressBarMaxValue(files.Count);
@@ -183,8 +188,7 @@ namespace WatchTool
 		protected override List<string> GetUrlListFromContent(string content)
 		{
 			string _grepKeyword = @"og:image"" content="".*""\>";
-
-			this.MEDIA_TYPE = MEDIATYPE.image; // Twitterの動画ダウンロードは今後追加するため
+			
 			MatchCollection tmp = Regex.Matches(content, _grepKeyword);
 			List<string> tmpFileList = new List<string>();
 			foreach (Match file in tmp)
@@ -233,12 +237,10 @@ namespace WatchTool
 
 			if (mediaType == "GraphVideo")
 			{
-				this.MEDIA_TYPE = MEDIATYPE.video;
 				tmpFileList.Add(jobj["graphql"]["shortcode_media"]["video_url"].ToString());
 			}
 			else if (mediaType == "GraphImage")
 			{
-				this.MEDIA_TYPE = MEDIATYPE.image;
 				tmpFileList.Add(jobj["graphql"]["shortcode_media"]["display_url"].ToString());
 			}
 			else if (mediaType == "GraphSidecar")
@@ -264,9 +266,9 @@ namespace WatchTool
 		{
 			try
 			{
-				return Regex.Match(url, @"https\:\/\/www\.instagram\.com\/p\/[0-9a-zA-Z\-]+/?").ToString() + "?__a=1";
+				return Regex.Match(url, @"https\:\/\/www\.instagram\.com\/p\/[0-9a-zA-Z\-_]+/?").ToString() + "?__a=1";
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
 				Common.ShowErrorMsgBox(url + "\r\n이 주소는 아직(?)지원하지 않습니다!");
 				return null;
