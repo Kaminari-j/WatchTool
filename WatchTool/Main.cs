@@ -19,10 +19,11 @@ namespace WatchTool
 	delegate void DoPerformProgressBarStepCallback();
 	delegate void DoResetProgressBarCallback();
 
-
 	public partial class Main : Form, IControlInterface
 	{
+		#region -- Control Property
 		public static string _DOWNLOAD_DIR = Application.StartupPath + @"\Download";
+		#endregion
 
 		public Main()
 		{
@@ -30,12 +31,12 @@ namespace WatchTool
 
 			// initialize controls
 			this.statusLabel_ServiceName.Text = "";
+			this.SortListOption_ToolStripMenuItem.Checked = Properties.Settings.Default.DownloadListboxSortMethod; // 基本降順ソートにする
 			DirectoryInfo di = new DirectoryInfo(_DOWNLOAD_DIR);
 			if (di.Exists == false)
 			{
 				di.Create();
 			}
-
 		}
 
 		#region -- Methods --
@@ -126,7 +127,7 @@ namespace WatchTool
 			{
 				downloadFiles.Add(file);
 			}
-			downloadFiles.Sort();
+			//downloadFiles.Sort();
 
 			this.listBox_Download.Items.Clear();
 
@@ -134,6 +135,8 @@ namespace WatchTool
 			{
 				this.listBox_Download.Items.Add(file);
 			}
+
+			WinCommon.sortListBoxItems(ref this.listBox_Download, SortListOption_ToolStripMenuItem.Checked);
 		}
 
 		public void ResetProgressBar()
@@ -208,6 +211,18 @@ namespace WatchTool
 				Properties.Settings.Default.Save();
 				this.DoResetListBoxData();
 			}
+		}
+
+		/// <summary>
+		/// オプションのチェック状態が変更された場合、ListBoxを整列しなおす
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void SortListOption_ToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+		{
+			Properties.Settings.Default.DownloadListboxSortMethod = SortListOption_ToolStripMenuItem.Checked;
+			Properties.Settings.Default.Save();
+			WinCommon.sortListBoxItems(ref this.listBox_Download, SortListOption_ToolStripMenuItem.Checked);
 		}
 
 		private void exitXToolStripMenuItem_Click(object sender, EventArgs e)

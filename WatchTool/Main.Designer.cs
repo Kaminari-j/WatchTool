@@ -36,7 +36,9 @@
 			this.listBox_Download = new System.Windows.Forms.ListBox();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.저장폴더설정DToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.OptionSetDir_DToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.EtcOption_OToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.SortListOption_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exitXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.btnSortList = new System.Windows.Forms.Button();
@@ -113,18 +115,35 @@
 			// optionsToolStripMenuItem
 			// 
 			this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.저장폴더설정DToolStripMenuItem,
+            this.OptionSetDir_DToolStripMenuItem,
+            this.EtcOption_OToolStripMenuItem,
             this.exitXToolStripMenuItem});
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
 			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(87, 22);
 			this.optionsToolStripMenuItem.Text = "Options (&O)";
 			// 
-			// 저장폴더설정DToolStripMenuItem
+			// OptionSetDir_DToolStripMenuItem
 			// 
-			this.저장폴더설정DToolStripMenuItem.Name = "저장폴더설정DToolStripMenuItem";
-			this.저장폴더설정DToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-			this.저장폴더설정DToolStripMenuItem.Text = "저장폴더 설정 (&D)";
-			this.저장폴더설정DToolStripMenuItem.Click += new System.EventHandler(this.SetDownloadDirToolStripMenuItem_Click);
+			this.OptionSetDir_DToolStripMenuItem.Name = "OptionSetDir_DToolStripMenuItem";
+			this.OptionSetDir_DToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+			this.OptionSetDir_DToolStripMenuItem.Text = "저장폴더 설정 (&D)";
+			this.OptionSetDir_DToolStripMenuItem.Click += new System.EventHandler(this.SetDownloadDirToolStripMenuItem_Click);
+			// 
+			// EtcOption_OToolStripMenuItem
+			// 
+			this.EtcOption_OToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.SortListOption_ToolStripMenuItem});
+			this.EtcOption_OToolStripMenuItem.Name = "EtcOption_OToolStripMenuItem";
+			this.EtcOption_OToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+			this.EtcOption_OToolStripMenuItem.Text = "옵션 (&O)";
+			// 
+			// SortListOption_ToolStripMenuItem
+			// 
+			this.SortListOption_ToolStripMenuItem.CheckOnClick = true;
+			this.SortListOption_ToolStripMenuItem.Name = "SortListOption_ToolStripMenuItem";
+			this.SortListOption_ToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+			this.SortListOption_ToolStripMenuItem.Text = "사진목록 역순으로 정렬";
+			this.SortListOption_ToolStripMenuItem.CheckedChanged += new System.EventHandler(this.SortListOption_ToolStripMenuItem_CheckedChanged);
 			// 
 			// exitXToolStripMenuItem
 			// 
@@ -202,9 +221,11 @@
 		private System.Windows.Forms.MenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem 저장폴더설정DToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem OptionSetDir_DToolStripMenuItem;
 		private System.Windows.Forms.Button btnSortList;
 		private System.Windows.Forms.ToolStripMenuItem exitXToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem EtcOption_OToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem SortListOption_ToolStripMenuItem;
 	}
 }
 
